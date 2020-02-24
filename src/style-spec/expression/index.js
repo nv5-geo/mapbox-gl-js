@@ -25,7 +25,7 @@ import type {Result} from '../util/result';
 import type {InterpolationType} from './definitions/interpolate';
 import type {PropertyValueSpecification} from '../types';
 import type {FormattedSection} from './types/formatted';
-import type Point from '@mapbox/point-geometry';
+import type {Point} from '@mapbox/point-geometry';
 import {CanonicalTileID} from '../../source/tile_id';
 
 export type Feature = {
@@ -66,7 +66,7 @@ export class StyleExpression {
         this._evaluator.globals = globals;
         this._evaluator.feature = feature;
         this._evaluator.featureState = featureState;
-        this._evaluator.canonical = canonical || null;
+        this._evaluator.canonical = canonical;
         this._evaluator.availableImages = availableImages || null;
         this._evaluator.formattedSection = formattedSection;
 
@@ -77,7 +77,7 @@ export class StyleExpression {
         this._evaluator.globals = globals;
         this._evaluator.feature = feature || null;
         this._evaluator.featureState = featureState || null;
-        this._evaluator.canonical = canonical || null;
+        this._evaluator.canonical = canonical;
         this._evaluator.availableImages = availableImages || null;
         this._evaluator.formattedSection = formattedSection || null;
 
