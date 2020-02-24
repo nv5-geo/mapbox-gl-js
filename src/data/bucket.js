@@ -7,7 +7,7 @@ import type FeatureIndex from './feature_index';
 import type Context from '../gl/context';
 import type {FeatureStates} from '../source/source_state';
 import type {ImagePosition} from '../render/image_atlas';
-import {CanonicalTileID} from '../source/tile_id';
+import type {CanonicalTileID} from '../source/tile_id';
 export type BucketParameters<Layer: TypedStyleLayer> = {
     index: number,
     layers: Array<Layer>,

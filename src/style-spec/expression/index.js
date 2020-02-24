@@ -25,15 +25,15 @@ import type {Result} from '../util/result';
 import type {InterpolationType} from './definitions/interpolate';
 import type {PropertyValueSpecification} from '../types';
 import type {FormattedSection} from './types/formatted';
-import type {Point} from '@mapbox/point-geometry';
-import {CanonicalTileID} from '../../source/tile_id';
+import type Point from '@mapbox/point-geometry';
+import type {CanonicalTileID} from '../../source/tile_id';
 
 export type Feature = {
     +type: 1 | 2 | 3 | 'Unknown' | 'Point' | 'MultiPoint' | 'LineString' | 'MultiLineString' | 'Polygon' | 'MultiPolygon',
     +id?: any,
     +properties: {[string]: any},
     +patterns?: {[string]: {"min": string, "mid": string, "max": string}},
-    +geometry?: Array<Array<Point>>
+    +geometry?: []
 };
 
 export type FeatureState = {[_: string]: any};

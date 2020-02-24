@@ -3,7 +3,7 @@
 import {Color} from './values';
 import type {FormattedSection} from './types/formatted';
 import type {GlobalProperties, Feature, FeatureState} from './index';
-import {CanonicalTileID} from '../../source/tile_id';
+import type {CanonicalTileID} from '../../source/tile_id';
 
 const geometryTypes = ['Unknown', 'Point', 'LineString', 'Polygon'];
 

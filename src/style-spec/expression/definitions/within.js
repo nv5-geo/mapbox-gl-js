@@ -8,7 +8,7 @@ import {BooleanType} from '../types';
 import type {Expression} from '../expression';
 import type ParsingContext from '../parsing_context';
 import type EvaluationContext from '../evaluation_context';
-import {CanonicalTileID} from '../../../source/tile_id';
+import type {CanonicalTileID} from '../../../source/tile_id';
 // import geojson from '../source/geojson_source';
 import type {GeoJSON, GeoJSONFeature} from '@mapbox/geojson-types';
 import type {Feature} from '../index';
@@ -59,23 +59,24 @@ class Within implements Expression {
     }
 
     static parse(args: $ReadOnlyArray<mixed>, context: ParsingContext) {
+        debugger;
         if (args.length !== 2)
             return context.error(`'within' expression requires exactly one argument, but found ${args.length - 1} instead.`);
 
-        if (!isValue(args[1]) || typeOf(args[1] !== 'Object'))
+        if (!isValue(args[1]) /*|| typeOf(args[1] !== 'Object')*/)
             return context.error(`'within' expression requires valid geojson source that contains polygon geometry type.`);
 
         const value = (args[1]: Object);
-        if (value.type !== 'Polygon') {
+        if (value.geometry.type !== 'Polygon') {
             return context.error(`'within' expression requires valid geojson source that contains polygon geometry type.`);
         }
         return new Within(value);
     }
 
     evaluate(ctx: EvaluationContext) {
-
-        const geometryType = ctx.geometryType();
-        if (geometryType === 'Point' && ctx.feature != null && ctx.canonical != null) {
+        debugger;
+        if (ctx.feature != null && ctx.canonical != null && ctx.geometryType() === 'Point') {
+            debugger;
             return pointsWithinPolygons(ctx.feature, ctx.canonical, this.geojson);
         } else if (geometryType === 'LineString') {
             return true;

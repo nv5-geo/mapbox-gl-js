@@ -19,7 +19,7 @@ import SymbolBucket from '../data/bucket/symbol_bucket';
 import EvaluationParameters from '../style/evaluation_parameters';
 import {SIZE_PACK_FACTOR} from './symbol_size';
 import ONE_EM from './one_em';
-import {CanonicalTileID} from '../source/tile_id';
+import type {CanonicalTileID} from '../source/tile_id';
 import type {Shaping, PositionedIcon, TextJustify} from './shaping';
 import type {CollisionBoxArray} from '../data/array_types';
 import type {SymbolFeature} from '../data/bucket/symbol_bucket';
@@ -366,7 +366,6 @@ function addFeature(bucket: SymbolBucket,
     if (textMaxSize === undefined) {
         textMaxSize = layoutTextSize;
     }
-    // debugger;
     const layout = bucket.layers[0].layout;
     const iconOffset = layout.get('icon-offset').evaluate(feature, {});
     const defaultHorizontalShaping = getDefaultHorizontalShaping(shapedTextOrientations.horizontal);

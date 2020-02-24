@@ -1,7 +1,7 @@
 // @flow
 
 import assert from 'assert';
-import {CanonicalTileID} from '../source/tile_id';
+import type {CanonicalTileID} from '../source/tile_id';
 import {clone, extend, easeCubicInOut} from '../util/util';
 import * as interpolate from '../style-spec/util/interpolate';
 import {normalizePropertyExpression} from '../style-spec/expression';

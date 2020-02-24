@@ -8,7 +8,7 @@ import {PossiblyEvaluatedPropertyValue} from '../style/properties';
 import {StructArrayLayout1f4, StructArrayLayout2f8, StructArrayLayout4f16, PatternLayoutArray} from './array_types';
 import {clamp} from '../util/util';
 import loadGeometry from './load_geometry';
-import {CanonicalTileID} from '../source/tile_id';
+import type {CanonicalTileID} from '../source/tile_id';
 import EvaluationParameters from '../style/evaluation_parameters';
 import FeaturePositionMap from './feature_position_map';
 import {

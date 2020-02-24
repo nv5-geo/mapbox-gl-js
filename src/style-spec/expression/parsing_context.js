@@ -69,7 +69,6 @@ class ParsingContext {
     }
 
     _parse(expr: mixed, options: {typeAnnotation?: 'assert' | 'coerce' | 'omit'}): ?Expression {
-        debugger;
         if (expr === null || typeof expr === 'string' || typeof expr === 'boolean' || typeof expr === 'number') {
             expr = ['literal', expr];
         }
@@ -96,6 +95,7 @@ class ParsingContext {
             }
 
             const Expr = this.registry[op];
+
             if (Expr) {
                 let parsed = Expr.parse(expr, this);
                 if (!parsed) return null;

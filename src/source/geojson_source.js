@@ -179,7 +179,6 @@ class GeoJSONSource extends Evented implements Source {
      * @returns {GeoJSONSource} this
      */
     setData(data: GeoJSON | string) {
-        debugger;
         this._data = data;
         this.fire(new Event('dataloading', {dataType: 'source'}));
         this._updateWorkerData((err) => {
@@ -251,7 +250,6 @@ class GeoJSONSource extends Evented implements Source {
         this._loaded = false;
         const options = extend({}, this.workerOptions);
         const data = this._data;
-        debugger;
         if (typeof data === 'string') {
             options.request = this.map._requestManager.transformRequest(browser.resolveURL(data), ResourceType.Source);
             options.request.collectResourceTiming = this._collectResourceTiming;

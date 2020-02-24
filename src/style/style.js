@@ -238,6 +238,7 @@ class Style extends Evented {
     }
 
     _load(json: StyleSpecification, validate: boolean) {
+        // debugger;
         if (validate && emitValidationErrors(this, validateStyle(json))) {
             return;
         }
