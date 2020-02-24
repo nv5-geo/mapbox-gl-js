@@ -1,4 +1,4 @@
-// @flow
+import loadGeometry from '../../data/load_geometry';// @flow
 
 import {createExpression} from '../expression';
 
@@ -82,7 +82,8 @@ function createFilter(filter: any): FeatureFilter {
     if (compiled.result === 'error') {
         throw new Error(compiled.value.map(err => `${err.key}: ${err.message}`).join(', '));
     } else {
-        return (globalProperties: GlobalProperties, feature: VectorTileFeature) => compiled.value.evaluate(globalProperties, feature);
+
+        return (globalProperties: GlobalProperties, feature: Feature) => compiled.value.evaluate(globalProperties, feature);
     }
 }
 

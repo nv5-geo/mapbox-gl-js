@@ -88,7 +88,7 @@ register('Grid', Grid);
 register('Color', Color);
 register('Error', Error);
 register('ResolvedImage', ResolvedImage);
-
+debugger;
 register('StylePropertyFunction', StylePropertyFunction);
 register('StyleExpression', StyleExpression, {omit: ['_evaluator']});
 

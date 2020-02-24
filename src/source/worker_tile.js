@@ -27,7 +27,7 @@ import type {
     WorkerTileCallback,
 } from '../source/worker_source';
 import type {PromoteIdSpecification} from '../style-spec/types';
-
+import {CanonicalTileID} from './tile_id';
 class WorkerTile {
     tileID: OverscaledTileID;
     uid: string;
@@ -186,13 +186,13 @@ class WorkerTile {
                     const bucket = buckets[key];
                     if (bucket instanceof SymbolBucket) {
                         recalculateLayers(bucket.layers, this.zoom, availableImages);
-                        performSymbolLayout(bucket, glyphMap, glyphAtlas.positions, iconMap, imageAtlas.iconPositions, this.showCollisionBoxes);
+                        performSymbolLayout(bucket, glyphMap, glyphAtlas.positions, iconMap, imageAtlas.iconPositions, this.showCollisionBoxes, this.tileID.canonical);
                     } else if (bucket.hasPattern &&
                         (bucket instanceof LineBucket ||
                          bucket instanceof FillBucket ||
                          bucket instanceof FillExtrusionBucket)) {
                         recalculateLayers(bucket.layers, this.zoom, availableImages);
-                        bucket.addFeatures(options, imageAtlas.patternPositions);
+                        bucket.addFeatures(options, this.tileID.canonical, imageAtlas.patternPositions);
                     }
                 }
 

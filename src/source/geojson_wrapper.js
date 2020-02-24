@@ -47,6 +47,7 @@ class FeatureWrapper implements VectorTileFeature {
     }
 
     loadGeometry() {
+        debugger;
         if (this._feature.type === 1) {
             const geometry = [];
             for (const point of this._feature.geometry) {
