@@ -88,7 +88,7 @@ class GeoJSONSource extends Evented implements Source {
      */
     constructor(id: string, options: GeoJSONSourceSpecification & {workerOptions?: any, collectResourceTiming: boolean}, dispatcher: Dispatcher, eventedParent: Evented) {
         super();
- 
+
         this.id = id;
 
         // `type` is a property rather than a constant to make it easy for 3rd

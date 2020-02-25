@@ -40,7 +40,7 @@ class CircleStyleLayer extends StyleLayer {
     }
 
     queryIntersectsFeature(queryGeometry: Array<Point>,
-                           vfeature: VectorTileFeature,
+                           vFeature: VectorTileFeature,
                            featureState: FeatureState,
                            geometry: Array<Array<Point>>,
                            zoom: number,
@@ -51,7 +51,7 @@ class CircleStyleLayer extends StyleLayer {
             this.paint.get('circle-translate'),
             this.paint.get('circle-translate-anchor'),
             transform.angle, pixelsToTileUnits);
-        const feature = {type: vfeature.type, properties: vfeature.properties, geometry: loadGeometry(vfeature)};
+        const feature = {type: vFeature.type, properties: vFeature.properties, geometry: loadGeometry(vFeature)};
         const radius = this.paint.get('circle-radius').evaluate(feature, featureState);
         const stroke = this.paint.get('circle-stroke-width').evaluate(feature, featureState);
         const size  = radius + stroke;

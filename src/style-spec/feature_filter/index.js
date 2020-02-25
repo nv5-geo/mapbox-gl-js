@@ -1,4 +1,4 @@
-import loadGeometry from '../../data/load_geometry';// @flow
+// @flow
 
 import {createExpression} from '../expression';
 

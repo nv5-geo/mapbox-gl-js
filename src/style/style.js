@@ -238,7 +238,6 @@ class Style extends Evented {
     }
 
     _load(json: StyleSpecification, validate: boolean) {
-        // debugger;
         if (validate && emitValidationErrors(this, validateStyle(json))) {
             return;
         }
@@ -369,8 +368,10 @@ class Style extends Evented {
     }
 
     /**
-     * Apply queued style updates in a batch and recalculate zoom-dependent paint properties.
-     */
+ * Apply queued style updates in a batch and recalculate zoom-dependent paint properties.
+ *
+ * @param parameters
+ */
     update(parameters: EvaluationParameters) {
         if (!this._loaded) {
             return;
@@ -620,10 +621,13 @@ class Style extends Evented {
     }
 
     /**
-     * Add a layer to the map style. The layer will be inserted before the layer with
-     * ID `before`, or appended if `before` is omitted.
-     * @param {string} [before] ID of an existing layer to insert before
-     */
+ * Add a layer to the map style. The layer will be inserted before the layer with
+ID `before`, or appended if `before` is omitted.
+ *
+ * @param layerObject
+ * @param {string} [before] ID of an existing layer to insert before
+ * @param options
+ */
     addLayer(layerObject: LayerSpecification | CustomLayerInterface, before?: string, options: StyleSetterOptions = {}) {
         this._checkLoaded();
 

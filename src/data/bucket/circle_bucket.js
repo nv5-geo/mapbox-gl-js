@@ -187,7 +187,7 @@ class CircleBucket<Layer: CircleStyleLayer | HeatmapStyleLayer> implements Bucke
                 segment.primitiveLength += 2;
             }
         }
-
+        // debugger;
         this.programConfigurations.populatePaintArrays(this.layoutVertexArray.length, feature, index, canonical, {});
     }
 }
