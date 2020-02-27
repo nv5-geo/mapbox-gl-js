@@ -78,7 +78,7 @@ function packColor(color: Color): [number, number] {
  */
 
 interface AttributeBinder {
-    populatePaintArray(length: number, feature: Feature, canonical: CanonicalTileID, imagePositions: {[string]: ImagePosition}, formattedSection?: FormattedSection): void;
+    populatePaintArray(length: number, feature: Feature, imagePositions: {[string]: ImagePosition}, canonical?: CanonicalTileID, formattedSection?: FormattedSection): void;
     updatePaintArray(start: number, length: number, feature: Feature, featureState: FeatureState, imagePositions: {[string]: ImagePosition}): void;
     upload(Context): void;
     destroy(): void;
@@ -162,7 +162,7 @@ class SourceExpressionBinder implements AttributeBinder {
         this.paintVertexArray = new PaintVertexArray();
     }
 
-    populatePaintArray(newLength: number, feature: Feature, canonical: CanonicalTileID, imagePositions: {[string]: ImagePosition}, formattedSection?: FormattedSection) {
+    populatePaintArray(newLength: number, feature: Feature, imagePositions: {[string]: ImagePosition}, canonical?: CanonicalTileID, formattedSection?: FormattedSection) {
         const start = this.paintVertexArray.length;
         const value = this.expression.evaluate(new EvaluationParameters(0), feature, {}, canonical, [], formattedSection);
         this.paintVertexArray.resize(newLength);
@@ -233,7 +233,7 @@ class CompositeExpressionBinder implements AttributeBinder, UniformBinder {
         this.paintVertexArray = new PaintVertexArray();
     }
 
-    populatePaintArray(newLength: number, feature: Feature, canonical: CanonicalTileID, imagePositions: {[string]: ImagePosition}, formattedSection?: FormattedSection) {
+    populatePaintArray(newLength: number, feature: Feature, imagePositions: {[string]: ImagePosition}, canonical?: CanonicalTileID, formattedSection?: FormattedSection) {
         const min = this.expression.evaluate(new EvaluationParameters(this.zoom), feature, {}, canonical, [], formattedSection);
         const max = this.expression.evaluate(new EvaluationParameters(this.zoom + 1), feature, {}, canonical, [], formattedSection);
         const start = this.paintVertexArray.length;
@@ -320,7 +320,7 @@ class CrossFadedCompositeBinder implements AttributeBinder {
         this.zoomOutPaintVertexArray = new PaintVertexArray();
     }
 
-    populatePaintArray(length: number, feature: Feature, canonical: CanonicalTileID, imagePositions: {[string]: ImagePosition}) {
+    populatePaintArray(length: number, feature: Feature, imagePositions: {[string]: ImagePosition}) {
         const start = this.zoomInPaintVertexArray.length;
         this.zoomInPaintVertexArray.resize(length);
         this.zoomOutPaintVertexArray.resize(length);
@@ -443,11 +443,11 @@ export default class ProgramConfiguration {
         return binder instanceof SourceExpressionBinder || binder instanceof CompositeExpressionBinder ? binder.maxValue : 0;
     }
 
-    populatePaintArrays(newLength: number, feature: Feature, canonical: CanonicalTileID, imagePositions: {[string]: ImagePosition}, formattedSection?: FormattedSection) {
+    populatePaintArrays(newLength: number, feature: Feature, imagePositions: {[string]: ImagePosition}, canonical?: CanonicalTileID, formattedSection?: FormattedSection) {
         for (const property in this.binders) {
             const binder = this.binders[property];
             if (binder instanceof SourceExpressionBinder || binder instanceof CompositeExpressionBinder || binder instanceof CrossFadedCompositeBinder)
-                (binder: AttributeBinder).populatePaintArray(newLength, feature, canonical, imagePositions, formattedSection);
+                (binder: AttributeBinder).populatePaintArray(newLength, feature, imagePositions, canonical, formattedSection);
         }
     }
     setConstantPatternPositions(posTo: ImagePosition, posFrom: ImagePosition) {
@@ -473,8 +473,8 @@ export default class ProgramConfiguration {
                         //AHM: Remove after https://github.com/mapbox/mapbox-gl-js/issues/6255
                         const value = layer.paint.get(property);
                         (binder: any).expression = value.value;
-                        const newFeature = {type: feature.type, id: feature.id, properties: feature.properties, geometry: loadGeometry(feature)};
-                        (binder: AttributeBinder).updatePaintArray(pos.start, pos.end, newFeature, featureStates[id], imagePositions);
+                        const evaluationFeature = {type: feature.type, id: ('id' in feature ? feature.id : null), properties: feature.properties, geometry: loadGeometry(feature)};
+                        (binder: AttributeBinder).updatePaintArray(pos.start, pos.end, evaluationFeature, featureStates[id], imagePositions);
                         dirty = true;
                     }
                 }
@@ -571,9 +571,9 @@ export class ProgramConfigurationSet<Layer: TypedStyleLayer> {
         this._bufferOffset = 0;
     }
 
-    populatePaintArrays(length: number, feature: Feature, index: number, canonical: CanonicalTileID, imagePositions: {[string]: ImagePosition}, formattedSection?: FormattedSection) {
+    populatePaintArrays(length: number, feature: Feature, index: number, imagePositions: {[string]: ImagePosition}, canonical: CanonicalTileID, formattedSection?: FormattedSection) {
         for (const key in this.programConfigurations) {
-            this.programConfigurations[key].populatePaintArrays(length, feature, canonical, imagePositions, formattedSection);
+            this.programConfigurations[key].populatePaintArrays(length, feature, imagePositions, canonical, formattedSection);
         }
 
         if (feature.id !== undefined) {

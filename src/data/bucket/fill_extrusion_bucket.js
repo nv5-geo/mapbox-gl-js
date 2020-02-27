@@ -92,10 +92,9 @@ class FillExtrusionBucket implements Bucket {
         this.hasPattern = hasPattern('fill-extrusion', this.layers, options);
 
         for (const {feature, id, index, sourceLayerIndex} of features) {
-            const newFeature = {type: feature.type, id: feature.id, properties: feature.properties, geometry: loadGeometry(feature)};
-            if (!this.layers[0]._featureFilter(new EvaluationParameters(this.zoom), newFeature, canonical)) continue;
-
             const geometry = loadGeometry(feature);
+            const evaluationFeature = {type: feature.type, id: ('id' in feature ? feature.id : null), properties: feature.properties, geometry: loadGeometry(feature)};
+            if (!this.layers[0]._featureFilter(new EvaluationParameters(this.zoom), evaluationFeature, canonical)) continue;
 
             const patternFeature: BucketFeature = {
                 id,
@@ -264,7 +263,7 @@ class FillExtrusionBucket implements Bucket {
             segment.vertexLength += numVertices;
         }
 
-        this.programConfigurations.populatePaintArrays(this.layoutVertexArray.length, feature, index, canonical, imagePositions);
+        this.programConfigurations.populatePaintArrays(this.layoutVertexArray.length, feature, index, imagePositions, canonical);
     }
 }
 

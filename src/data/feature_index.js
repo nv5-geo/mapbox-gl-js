@@ -180,8 +180,8 @@ class FeatureIndex {
         const sourceLayerName = this.sourceLayerCoder.decode(sourceLayerIndex);
         const sourceLayer = this.vtLayers[sourceLayerName];
         const feature = sourceLayer.feature(featureIndex);
-        const newFeature = {type: feature.type, id: feature.id, properties: feature.properties, geometry: loadGeometry(feature)};
-        if (!filter(new EvaluationParameters(this.tileID.overscaledZ), newFeature))
+        const evaluationFeature = {type: feature.type, id: ('id' in feature ? feature.id : null), properties: feature.properties};
+        if (!filter(new EvaluationParameters(this.tileID.overscaledZ), evaluationFeature))
             return;
 
         const id = this.getId(feature, sourceLayerName);

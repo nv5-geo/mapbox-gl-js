@@ -430,8 +430,8 @@ class SymbolBucket implements Bucket {
         const globalProperties = new EvaluationParameters(this.zoom);
 
         for (const {feature, id, index, sourceLayerIndex} of features) {
-            const newFeature = {type: feature.type, id: feature.id, properties: feature.properties, geometry: loadGeometry(feature)};
-            if (!layer._featureFilter(globalProperties, newFeature, canonical)) {
+            const evaluationFeature = {type: feature.type, id: ('id' in feature ? feature.id : null), properties: feature.properties, geometry: loadGeometry(feature)};
+            if (!layer._featureFilter(globalProperties, evaluationFeature, canonical)) {
                 continue;
             }
             let text: Formatted | void;
@@ -439,7 +439,7 @@ class SymbolBucket implements Bucket {
                 // Expression evaluation will automatically coerce to Formatted
                 // but plain string token evaluation skips that pathway so do the
                 // conversion here.
-                const resolvedTokens = layer.getValueAndResolveTokens('text-field', newFeature, canonical, availableImages);
+                const resolvedTokens = layer.getValueAndResolveTokens('text-field', evaluationFeature, canonical, availableImages);
                 const formattedText = Formatted.factory(resolvedTokens);
                 if (containsRTLText(formattedText)) {
                     this.hasRTLText = true;
@@ -449,7 +449,7 @@ class SymbolBucket implements Bucket {
                     getRTLTextPluginStatus() === 'unavailable' || // We don't intend to lazy-load the rtl text plugin, so proceed with incorrect shaping
                     this.hasRTLText && globalRTLTextPlugin.isParsed() // Use the rtlText plugin to shape text
                 ) {
-                    text = transformText(formattedText, layer, newFeature);
+                    text = transformText(formattedText, layer, evaluationFeature);
                 }
             }
 
@@ -458,7 +458,7 @@ class SymbolBucket implements Bucket {
                 // Expression evaluation will automatically coerce to Image
                 // but plain string token evaluation skips that pathway so do the
                 // conversion here.
-                const resolvedTokens = layer.getValueAndResolveTokens('icon-image', newFeature, canonical, availableImages);
+                const resolvedTokens = layer.getValueAndResolveTokens('icon-image', evaluationFeature, canonical, availableImages);
                 if (resolvedTokens instanceof ResolvedImage) {
                     icon = resolvedTokens;
                 } else {
@@ -470,7 +470,7 @@ class SymbolBucket implements Bucket {
                 continue;
             }
             const sortKey = this.sortFeaturesByKey ?
-                symbolSortKey.evaluate(newFeature, {}, canonical) :
+                symbolSortKey.evaluate(evaluationFeature, {}, canonical) :
                 undefined;
 
             const symbolFeature: SymbolFeature = {
@@ -491,7 +491,7 @@ class SymbolBucket implements Bucket {
             }
 
             if (text) {
-                const fontStack = textFont.evaluate(newFeature, {}, canonical).join(',');
+                const fontStack = textFont.evaluate(evaluationFeature, {}, canonical).join(',');
                 const textAlongLine = layout.get('text-rotation-alignment') === 'map' && layout.get('symbol-placement') !== 'point';
                 this.allowVerticalPlacement = this.writingModes && this.writingModes.indexOf(WritingMode.vertical) >= 0;
                 for (const section of text.sections) {
@@ -639,7 +639,7 @@ class SymbolBucket implements Bucket {
             this.glyphOffsetArray.emplaceBack(glyphOffset[0]);
 
             if (i === quads.length - 1 || sectionIndex !== quads[i + 1].sectionIndex) {
-                arrays.programConfigurations.populatePaintArrays(layoutVertexArray.length, feature, feature.index, canonical, {}, sections && sections[sectionIndex]);
+                arrays.programConfigurations.populatePaintArrays(layoutVertexArray.length, feature, feature.index, {}, canonical, sections && sections[sectionIndex]);
             }
         }
 
