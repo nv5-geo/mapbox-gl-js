@@ -33,7 +33,7 @@ export type Feature = {
     +id?: any,
     +properties: {[string]: any},
     +patterns?: {[string]: {"min": string, "mid": string, "max": string}},
-    +geometry: Array<Array<Point>>
+    +geometry?: Array<Array<Point>>
 };
 
 export type FeatureState = {[_: string]: any};
