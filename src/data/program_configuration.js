@@ -7,8 +7,8 @@ import {register} from '../util/web_worker_transfer';
 import {PossiblyEvaluatedPropertyValue} from '../style/properties';
 import {StructArrayLayout1f4, StructArrayLayout2f8, StructArrayLayout4f16, PatternLayoutArray} from './array_types';
 import {clamp} from '../util/util';
+
 import loadGeometry from './load_geometry';
-import type {CanonicalTileID} from '../source/tile_id';
 import EvaluationParameters from '../style/evaluation_parameters';
 import FeaturePositionMap from './feature_position_map';
 import {
@@ -19,6 +19,7 @@ import {
     type UniformLocations
 } from '../render/uniform_binding';
 
+import type {CanonicalTileID} from '../source/tile_id';
 import type Context from '../gl/context';
 import type {TypedStyleLayer} from '../style/style_layer/typed_style_layer';
 import type {CrossfadeParameters} from '../style/evaluation_parameters';

@@ -3459,7 +3459,7 @@
         "group": "Decision",
         "sdk-support": {
           "basic functionality": {
-            "js": "1.6.0"
+            "js": "1.9.0"
           }
         }
       },

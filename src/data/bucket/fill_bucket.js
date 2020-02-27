@@ -14,6 +14,7 @@ import {register} from '../../util/web_worker_transfer';
 import {hasPattern, addPatternDependencies} from './pattern_bucket_features';
 import loadGeometry from '../load_geometry';
 import EvaluationParameters from '../../style/evaluation_parameters';
+
 import type {CanonicalTileID} from '../../source/tile_id';
 import type {
     Bucket,
