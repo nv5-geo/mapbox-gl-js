@@ -3,12 +3,15 @@
 import {createExpression} from '../expression';
 import type {GlobalProperties, Feature} from '../expression';
 import type {CanonicalTileID} from '../../source/tile_id';
-export type FeatureFilter = (globalProperties: GlobalProperties, feature: Feature, canonical?: CanonicalTileID) => boolean;
+
+type FilterExpression = (globalProperties: GlobalProperties, feature: Feature, canonical?: CanonicalTileID) => boolean;
+export type FeatureFilter ={filter: FilterExpression,
+                            needGeometry: boolean};
 
 export default createFilter;
 export {isExpressionFilter};
 
-function isExpressionFilter(filter: any) {
+function isExpressionFilter(filter: any, needGeometry: boolean) {
     if (filter === true || filter === false) {
         return true;
     }
@@ -38,12 +41,14 @@ function isExpressionFilter(filter: any) {
     case 'any':
     case 'all':
         for (const f of filter.slice(1)) {
-            if (!isExpressionFilter(f) && typeof f !== 'boolean') {
+            if (!isExpressionFilter(f, needGeometry) && typeof f !== 'boolean') {
                 return false;
             }
         }
         return true;
-
+    case 'within':
+        needGeometry = true;
+        return true;
     default:
         return true;
     }
@@ -71,10 +76,11 @@ const filterSpec = {
  */
 function createFilter(filter: any): FeatureFilter {
     if (filter === null || filter === undefined) {
-        return () => true;
+        return {filter: () => true, needGeometry: false};
     }
 
-    if (!isExpressionFilter(filter)) {
+    const withinExpr = false;
+    if (!isExpressionFilter(filter, withinExpr)) {
         filter = convertFilter(filter);
     }
 
@@ -82,8 +88,8 @@ function createFilter(filter: any): FeatureFilter {
     if (compiled.result === 'error') {
         throw new Error(compiled.value.map(err => `${err.key}: ${err.message}`).join(', '));
     } else {
-
-        return (globalProperties: GlobalProperties, feature: Feature, canonical?: CanonicalTileID) => compiled.value.evaluate(globalProperties, feature, {}, canonical);
+        return {filter: (globalProperties: GlobalProperties, feature: Feature, canonical?: CanonicalTileID) => compiled.value.evaluate(globalProperties, feature, {}, canonical),
+            needGeometry: withinExpr};
     }
 }
 
