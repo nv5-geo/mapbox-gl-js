@@ -244,7 +244,7 @@ class Within implements Expression {
                 return new Within(geojson, geojson);
             }
         }
-        return context.error(`'within' expression requires valid geojson source that contains polygon geometry type.`);
+        return context.error(`'within' expression requires valid geojson object that contains polygon geometry type.`);
     }
 
     evaluate(ctx: EvaluationContext) {
